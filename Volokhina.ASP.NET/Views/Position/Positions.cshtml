@@ -1,0 +1,72 @@
+﻿@using Volokhina.ASP.NET.Models
+
+@model List<PositionsModel>
+
+@{ ViewBag.Title = "Должности компании";
+    ViewBag.IsAdmin = (string)TempData.Peek("login") == "admin";
+    if (ViewBag.IsAdmin)
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+}
+
+<div class="container">
+    <div class="row align-items-center">
+        <div class="col-8">
+            <h1>List of positions:</h1>
+        </div>
+        <div class="col-2"></div>
+        <div class="col">
+            @if (ViewBag.IsAdmin)
+            {
+                <button class="btn btn-outline-success" type="button" data-toggle="collapse" data-target="#collapseCompanyAdd" aria-expanded="false" aria-controls="collapseCompanyAdd">
+                        Add position
+                </button>            
+             }
+        </div>
+    </div>
+
+    @if (ViewBag.IsAdmin)
+    {
+    <div class="collapse" id="collapseCompanyAdd">
+    <form action="/Position/AddPosition" method="post">
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="newid">IDPosition</label>
+                <input type="number" class="form-control" id="newid" name="id">
+            </div>
+            <div class="form-group">
+                <label for="newposition">Name of position</label>
+                <input type="text" class="form-control" id="newposition" name="name">
+            </div>
+        </div>
+
+        <button class="btn btn-success form-control" type="submit" id="buttonNewPosition">
+            Add
+        </button>
+    </form>
+    </div>
+     }
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var m in Model)
+            {
+                <tr>
+            <td>@m.IDPosition</td>
+            <td>@m.NameOfPosition</td>            
+            @if (ViewBag.IsAdmin)
+            {
+                <td>@Html.ActionLink("Delete", "DeletePosition", new { idPosition = m.IDPosition }, new { @class = "btn btn-outline-danger", @type = "button" })</td>
+            }
+                </tr>}
+        </tbody>
+    </table>
+</div>
